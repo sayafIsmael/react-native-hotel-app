@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, FlatList, StyleSheet, ActivityIndicator, Text } from 'react-native';
 import { Card, Title, Paragraph, Button } from 'react-native-paper';
-import { useHotelStore } from '../hooks/hotelStore';
+import { Hotel, useHotelStore } from '../hooks/hotelStore';
 import axios from 'axios';
 import StarRating from 'react-native-star-rating';
 import HotelCarousel from '../components/HotelCarousel';
@@ -51,7 +51,7 @@ const HomeScreen = () => {
   const startIndex = (page - 1) * perPage;
   const paginatedHotels = hotels.slice(startIndex, startIndex + perPage); 
 
-  const renderItem = ({ item }: any) => (
+  const renderItem = ({ item }: {item: Hotel}) => (
     <Card style={styles.card}>
       <HotelCarousel images={item.images} />
       <Card.Content>

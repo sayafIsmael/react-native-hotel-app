@@ -1,11 +1,14 @@
 import create from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-type Hotel = {
+export type Hotel = {
   id: number;
   name: string;
+  price: string;
+  location: string;
   rating: number;
-  image: string;
+  images: string[];
+  amenities: string[];
 };
 
 type HotelState = {
