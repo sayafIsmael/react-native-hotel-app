@@ -5,7 +5,6 @@ import SInfo from 'react-native-sensitive-info';
 type AuthState = {
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<void>;
-  refreshToken: () => Promise<void>;
 };
 
 export const useAuthStore = create<AuthState>(set => ({
@@ -22,22 +21,7 @@ export const useAuthStore = create<AuthState>(set => ({
       console.error('Authentication error:', error);
       throw new Error('Authentication failed');
     }
-  },
-  refreshToken: async () => {
-    try {
-      const refreshToken = await SInfo.getItem('refreshToken', {});
-      if (!refreshToken) {
-        throw new Error('No refresh token found');
-      }
-      const response = await axios.post('/refresh', { refreshToken });
-      const { accessToken } = response.data;
-      await SInfo.setItem('accessToken', accessToken, {});
-      set((state) => ({ ...state, isAuthenticated: true }));
-    } catch (error) {
-      console.error('Refresh token error:', error);
-      throw new Error('Failed to refresh token');
-    }
-  },
+  }
 }));
 
 (async () => {

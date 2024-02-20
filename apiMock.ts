@@ -72,29 +72,8 @@ mock.onPost('/login').reply<AxiosRequestConfig>(config => {
   }
 });
 
-mock.onPost('/refresh').reply<AxiosRequestConfig>(config => {
-  const { refreshToken } = JSON.parse(config.data as string);
-  const decodedToken = decodeToken(refreshToken);
-  if (decodedToken) {
-    const accessToken = generateRandomToken();
-    return [200, { accessToken }];
-  } else {
-    return [401, { error: 'Invalid refresh token' }];
-  }
-});
-
 const generateRandomToken = () => {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 };
-
-const decodeToken = (token: string): { userId: number } | null => {
-  try {
-    const decodedPayload = JSON.parse(atob(token.split('.')[1]));
-    return { userId: decodedPayload.userId };
-  } catch (error) {
-    return null;
-  }
-};
-
 
 export default mock;
