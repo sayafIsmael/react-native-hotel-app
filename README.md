@@ -5,8 +5,8 @@ Install The App on Android [**Download APK**](https://drive.google.com/file/d/1z
 
 
 # Login Credentials
-username: admin
-password: password
+username: "admin" &
+password: "password"
 
 # Getting Started
 
