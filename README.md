@@ -1,8 +1,8 @@
 # Download the app
 
 Install The App on Android [**Download APK**]([https://reactnative.dev](https://drive.google.com/file/d/1z0W5e401f_SLZaN4BXrG6puYlj_cpBYv/view?usp=sharing))
-![image](https://github.com/sayafIsmael/react-native-hotel-app/assets/45027528/7c4cf0e9-4f06-4e9f-8ecf-3063bbdf951f)
-![image](https://github.com/sayafIsmael/react-native-hotel-app/assets/45027528/8e67b48c-8cd5-42e8-852d-07478b5341e1)
+![App Screens](https://github.com/sayafIsmael/react-native-hotel-app/assets/45027528/005ef5d3-dc13-47b7-82da-ea44c71db797)
+
 
 # Login Credentials
 username: admin
