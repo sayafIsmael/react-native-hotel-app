@@ -4,7 +4,6 @@ import { Alert } from 'react-native';
 
 type AuthState = {
   isAuthenticated: boolean;
-  token: string | null;
   login: (username: string, password: string) => void;
 };
 
@@ -15,9 +14,9 @@ export const useAuthStore = create<AuthState>((set) => ({
     if (username === 'admin' && password === 'password') {
       const token = 'sample_token';
       await AsyncStorage.setItem('token', token);
-      set({ isAuthenticated: true, token });
+      set({ isAuthenticated: true });
     } else {
-      set({ isAuthenticated: false, token: null });
+      set({ isAuthenticated: false });
       Alert.alert('Error', 'Username or password does not match. Please try again.');
     }
   },
@@ -26,6 +25,6 @@ export const useAuthStore = create<AuthState>((set) => ({
 (async () => {
   const token = await AsyncStorage.getItem('token');
   if (token) {
-    useAuthStore.setState({ isAuthenticated: true, token });
+    useAuthStore.setState({ isAuthenticated: true });
   }
 })();
