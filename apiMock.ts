@@ -1,11 +1,32 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
 const mock = new MockAdapter(axios);
 
+type User = {
+  username: string;
+  password: string;
+  id: number;
+};
+
+type Tokens = {
+  accessToken: string;
+  refreshToken: string;
+};
+
 const amenitiesList = ['Wi-Fi', 'Parking', 'Swimming Pool', 'Gym', 'Restaurant', 'Spa', 'Room Service'];
 
-const generateHotel = (id: number) => {
+type Hotel = {
+  id: number;
+  name: string;
+  rating: number;
+  images: string[];
+  price: number;
+  location: string;
+  amenities: string[];
+};
+
+const generateHotel = (id: number): Hotel => {
   const locations = ['New York, USA', 'Paris, France', 'Tokyo, Japan', 'London, UK', 'Sydney, Australia'];
   const randomLocation = locations[Math.floor(Math.random() * locations.length)];
 
@@ -32,7 +53,48 @@ const generateHotel = (id: number) => {
 
 const mockHotels = Array.from({ length: 100 }, (_, index) => generateHotel(index + 1));
 
-mock.onPost('/login').reply(200, { token: 'sample_token' });
+const users: User[] = [
+  { username: 'admin', password: 'password', id: 1 },
+];
+
 mock.onGet('/hotels').reply(200, { hotels: mockHotels });
+
+mock.onPost('/login').reply<AxiosRequestConfig>(config => {
+  const { username, password } = JSON.parse(config.data as string);
+  const user = users.find(user => user.username === username && user.password === password);
+  if (user) {
+    const accessToken = generateRandomToken();
+    const refreshToken = generateRandomToken();
+    const tokens: Tokens = { accessToken, refreshToken };
+    return [200, tokens];
+  } else {
+    return [401, { error: 'Invalid credentials' }];
+  }
+});
+
+mock.onPost('/refresh').reply<AxiosRequestConfig>(config => {
+  const { refreshToken } = JSON.parse(config.data as string);
+  const decodedToken = decodeToken(refreshToken);
+  if (decodedToken) {
+    const accessToken = generateRandomToken();
+    return [200, { accessToken }];
+  } else {
+    return [401, { error: 'Invalid refresh token' }];
+  }
+});
+
+const generateRandomToken = () => {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+};
+
+const decodeToken = (token: string): { userId: number } | null => {
+  try {
+    const decodedPayload = JSON.parse(atob(token.split('.')[1]));
+    return { userId: decodedPayload.userId };
+  } catch (error) {
+    return null;
+  }
+};
+
 
 export default mock;

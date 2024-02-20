@@ -1,30 +1,52 @@
 import create from 'zustand';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert } from 'react-native';
+import axios from 'axios';
+import SInfo from 'react-native-sensitive-info';
 
 type AuthState = {
   isAuthenticated: boolean;
-  login: (username: string, password: string) => void;
+  login: (username: string, password: string) => Promise<void>;
+  refreshToken: () => Promise<void>;
 };
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>(set => ({
   isAuthenticated: false,
-  token: null,
   login: async (username, password) => {
-    if (username === 'admin' && password === 'password') {
-      const token = 'sample_token';
-      await AsyncStorage.setItem('token', token);
+    try {
+      const response = await axios.post('/login', { username, password });
+      const { accessToken, refreshToken } = response.data;
+      await SInfo.setItem('accessToken', accessToken, {});
+      await SInfo.setItem('refreshToken', refreshToken, {});
       set({ isAuthenticated: true });
-    } else {
+    } catch (error) {
       set({ isAuthenticated: false });
-      Alert.alert('Error', 'Username or password does not match. Please try again.');
+      console.error('Authentication error:', error);
+      throw new Error('Authentication failed');
+    }
+  },
+  refreshToken: async () => {
+    try {
+      const refreshToken = await SInfo.getItem('refreshToken', {});
+      if (!refreshToken) {
+        throw new Error('No refresh token found');
+      }
+      const response = await axios.post('/refresh', { refreshToken });
+      const { accessToken } = response.data;
+      await SInfo.setItem('accessToken', accessToken, {});
+      set((state) => ({ ...state, isAuthenticated: true }));
+    } catch (error) {
+      console.error('Refresh token error:', error);
+      throw new Error('Failed to refresh token');
     }
   },
 }));
 
 (async () => {
-  const token = await AsyncStorage.getItem('token');
-  if (token) {
-    useAuthStore.setState({ isAuthenticated: true });
+  try {
+    const accessToken = await SInfo.getItem('accessToken', {});
+    if (accessToken) {
+      useAuthStore.setState({ isAuthenticated: true });
+    }
+  } catch (error) {
+    console.error('Token retrieval error:', error);
   }
 })();
