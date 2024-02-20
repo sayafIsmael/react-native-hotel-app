@@ -1,4 +1,12 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Download the app
+
+Install The App on Android [**Download APK**]([https://reactnative.dev](https://drive.google.com/file/d/1z0W5e401f_SLZaN4BXrG6puYlj_cpBYv/view?usp=sharing))
+![image](https://github.com/sayafIsmael/react-native-hotel-app/assets/45027528/7c4cf0e9-4f06-4e9f-8ecf-3063bbdf951f)
+![image](https://github.com/sayafIsmael/react-native-hotel-app/assets/45027528/8e67b48c-8cd5-42e8-852d-07478b5341e1)
+
+# Login Credentials
+username: admin
+password: password
 
 # Getting Started
 
@@ -12,9 +20,11 @@ To start Metro, run the following command from the _root_ of your React Native p
 
 ```bash
 # using npm
+npm install
 npm start
 
 # OR using Yarn
+yarn
 yarn start
 ```
 
