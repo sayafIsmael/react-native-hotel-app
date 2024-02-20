@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import LoginScreen from './screens/LoginScreen';
@@ -29,9 +29,23 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator>
         {isAuthenticated ? (
-          <Stack.Screen name="Hotels" component={HomeScreen} />
+          <Stack.Screen
+            name="Hotels"
+            component={HomeScreen}
+            options={{
+              title: 'Home',
+              headerTitleAlign: 'center',
+            }}
+          />
         ) : (
-          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{
+              title: 'Login',
+              headerTitleAlign: 'center',
+            }}
+          />
         )}
       </Stack.Navigator>
     </NavigationContainer>
